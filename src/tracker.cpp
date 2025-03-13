@@ -101,7 +101,8 @@ bool Tracker::login(const std::string user_name, const std::string user_password
                 std::string password;
                 if(inputFile.is_open())
                 {
-                    inputFile >> password;
+                    inputFile >> password; 
+                    std::string i = "a";
                     std::cout << password << std::endl;
                     if(password == user_password)
                     {
