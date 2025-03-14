@@ -41,15 +41,28 @@ int main() {
     }
     if (auth_sign || auth_login) 
     {
-        while(true) {
+        std::string trans_name;
+        while(true) 
+        {
+            system("cls");
             std::cout << "What would you like to do? " << std::endl;
             std::cout << "1. Store transaction" << std::endl;
+            std::cout << "2. View stored transactions" << std::endl;
+            std::cout << "3. Get transaction info" << std::endl;
             std::cout << "Enter your choice: ";
             std::cin >> choice;
-            switch(choice) {
+            switch(choice) 
+            {
                 case 1:
                     t.Storetrans(base_path, user_name);
                     break;
+                case 2:
+                    t.viewtrans(user_name);
+                case 3:
+                    std::cout << "Enter transaction name : ";
+                    std::getline(std::cin, trans_name);
+                    trans_name = trans_name + ".txt";
+                    t.transinfo(user_name, trans_name);
                 default:
                     std::cout << "Invalid choice" << std::endl;
                     break;

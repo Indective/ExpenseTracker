@@ -15,15 +15,21 @@ void Tracker::Storetrans(const std::string &base_path, const std::string user_na
     std::string trans_category;
     int amount;
     std::string date;
-    std::cout << "Enter the name of the transaction: " << std::endl;
-    std::getline(std::cin, trans_name);
-    std::cout << "Enter the category of the transaction: " << std::endl;
-    std::getline(std::cin, trans_category);
-    std::cout << "Enter the amount of the transaction: " << std::endl;
+    std::cout << std::endl << "Enter the name of the transaction: ";
+    std::cin >> trans_name;
+    std::cout << std::endl << "Enter the category of the transaction: ";
+    std::cin >> trans_category;
+    std::cout << std::endl << "Enter the amount of the transaction: ";
     std::cin >> amount;
     std::cin.ignore();
-    std::cout << "Enter the date of the transaction: " << std::endl;
-    std::getline(std::cin, date);
+    std::cout << std::endl << "Enter the date of the transaction: ";
+    std::cin >> date;
+    if (trans_name == user_name + ".txt")
+    {
+        std::cout << "Cannot set trasaction name as user name " << std::endl;
+        return;
+        
+    }
     std::ofstream outfile(trans_name + ".txt");
     if(outfile.is_open())
     {
@@ -48,6 +54,7 @@ bool Tracker::signuser(const std::string user_name , const std::string user_pass
     {
         outputFile << user_password << std::endl;
         outputFile.close();
+        fs::current_path(full_path + "/" + user_name);
         return true;
     }
     else
@@ -96,18 +103,18 @@ bool Tracker::login(const std::string user_name, const std::string user_password
             
             if(i.path().filename() == user_name)
             {
-                std::cout << i.path().filename() << std::endl;
-                std::ifstream inputFile(user_name + ".txt");
+                full_path = full_path + "/" + user_name;
+                fs::current_path(full_path);
+                std::ifstream infile;
                 std::string password;
-                if(inputFile.is_open())
+                infile.open(user_name + ".txt");
+                if(infile.is_open())
                 {
-                    inputFile >> password; 
-                    std::string i = "a";
-                    std::cout << password << std::endl;
+                    infile >> password; 
                     if(password == user_password)
                     {
+                        system("cls");
                         std::cout << "Login successful" << std::endl;
-                        fs::current_path(full_path + "/" + user_name);
                         return true;
                     }
                     else
@@ -123,5 +130,36 @@ bool Tracker::login(const std::string user_name, const std::string user_password
     {
         std::cerr << e.what() << '\n';
     }
+    return false;
     
+}
+
+void Tracker::viewtrans(const std::string user_name)
+{
+    std::cout << "Current transactions : " << std::endl;
+    for (auto &i : fs::directory_iterator{fs::current_path().string()})
+    {
+        if (i.path().filename() != user_name + ".txt")
+        {
+            std::cout << i.path().filename() << std::endl;
+        }
+    }
+}
+
+void Tracker::transinfo(const std::string user_name, const std::string trans_name)
+{
+    for (auto &i : fs::directory_iterator{fs::current_path().string()})
+    {
+        if (i.path().filename() == trans_name + ".txt")
+        {
+            std::string text;
+            std::ifstream infile;
+            infile.open(trans_name + ".txt");
+            if (infile.is_open())
+            {
+                infile >> text;
+                std::cout << text << std::endl;
+            }
+        }
+    }
 }
