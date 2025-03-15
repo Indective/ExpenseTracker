@@ -44,7 +44,7 @@ void Tracker::Storetrans(const std::string &base_path, const std::string user_na
     } 
 }
 
-bool Tracker::signuser(const std::string user_name , const std::string user_password, const std::string &base_path)
+bool Tracker::signuser(const std::string user_name , const std::string user_password, const std::string &base_path, const int bank_balance)
 {
     std::string full_path = base_path + "/" + fixed_dir;
     fs::current_path(full_path);
@@ -55,6 +55,7 @@ bool Tracker::signuser(const std::string user_name , const std::string user_pass
     if(outputFile.is_open())
     {
         outputFile << user_password << std::endl;
+        outputFile << bank_balance << std::endl;
         outputFile.close();
         return true;
     }

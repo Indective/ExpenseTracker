@@ -8,7 +8,7 @@ class Tracker {
         std::string fixed_dir = "Users";
     public:
         void Storetrans(const std::string &base_paths, const std::string user_name);
-        bool signuser(const std::string user_name, const std::string user_password, const std::string &base_path);
+        bool signuser(const std::string user_name, const std::string user_password, const std::string &base_path, const int bank_balance);
         void createdir(const std::string &base_path);
         bool checkdir(const std::string &base_path);
         bool login (const std::string user_name, const std::string user_password,const std::string base_path);

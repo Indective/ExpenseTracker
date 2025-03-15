@@ -9,6 +9,7 @@ int main() {
     Tracker t;
     std::string user_name;
     std::string user_password;
+    int balance;
     std::string base_path = fs::current_path().parent_path().string();
     bool auth_sign;
     bool auth_login;
@@ -17,6 +18,7 @@ int main() {
     std::cout << "What would you like to do? " << std::endl;
     std::cout << "1. Sign up" << std::endl;
     std::cout << "2. Login" << std::endl;
+    std::cout << "3. Exit" << std::endl;
     std::cout << "Enter your choice: ";
     int choice;
     std::cin >> choice;
@@ -26,7 +28,9 @@ int main() {
             std::cin >> user_name;
             std::cout << "Enter your password: ";
             std::cin >> user_password;
-            auth_sign = t.signuser(user_name, user_password, base_path);
+            std::cout << "Enter your current bank balance : ";
+            std::cin >> balance;
+            auth_sign = t.signuser(user_name, user_password, base_path, balance);
             break;
         case 2:
             std::cout << "Enter your username: ";
@@ -35,6 +39,8 @@ int main() {
             std::cin >> user_password;
             auth_login = t.login(user_name, user_password, base_path);
             break;
+        case 3:
+            exit(0);
         default:
             std::cout << "Invalid choice" << std::endl;
             break;
@@ -48,6 +54,7 @@ int main() {
             std::cout << "1. Store transaction" << std::endl;
             std::cout << "2. View stored transactions" << std::endl;
             std::cout << "3. Get transaction info" << std::endl;
+            std::cout << "4. Exit." << std::endl;
             std::cout << "Enter your choice: ";
             std::cin >> choice;
             switch(choice) 
@@ -66,6 +73,9 @@ int main() {
                     std::cin >> trans_name;
                     trans_name = trans_name + ".txt";
                     t.transinfo(user_name, trans_name);
+                    break;
+                case 4:
+                    exit(0);
                     break;
             }
         }   
