@@ -24,37 +24,38 @@ void Tracker::Storetrans(const std::string &base_path, const std::string user_na
     std::cin.ignore();
     std::cout << std::endl << "Enter the date of the transaction: ";
     std::cin >> date;
-    if (trans_name == user_name + ".txt")
+    if (trans_name == user_name)
     {
         std::cout << "Cannot set trasaction name as user name " << std::endl;
-        return;
         
     }
-    std::ofstream outfile(trans_name + ".txt");
-    if(outfile.is_open())
+    else
     {
-        outfile << trans_name << std::endl;
-        outfile << trans_category << std::endl;
-        outfile << amount << std::endl;
-        outfile << date << std::endl;
-        outfile.close();
-        std::cout << "Transaction stored successfully" << std::endl;
-    }    
+        std::ofstream outfile(trans_name + ".txt");
+        if(outfile.is_open())
+        {
+            outfile << trans_name << std::endl;
+            outfile << trans_category << std::endl;
+            outfile << amount << std::endl;
+            outfile << date << std::endl;
+            outfile.close();
+            std::cout << "Transaction stored successfully" << std::endl;
+        }   
+    } 
 }
 
 bool Tracker::signuser(const std::string user_name , const std::string user_password, const std::string &base_path)
 {
     std::string full_path = base_path + "/" + fixed_dir;
     fs::current_path(full_path);
-    fs::create_directory(full_path + "/" + user_name);
     full_path = full_path + "/" + user_name;
+    fs::create_directory(full_path);
     fs::current_path(full_path);
     std::ofstream outputFile (user_name + ".txt");
     if(outputFile.is_open())
     {
         outputFile << user_password << std::endl;
         outputFile.close();
-        fs::current_path(full_path + "/" + user_name);
         return true;
     }
     else
@@ -150,16 +151,21 @@ void Tracker::transinfo(const std::string user_name, const std::string trans_nam
 {
     for (auto &i : fs::directory_iterator{fs::current_path().string()})
     {
-        if (i.path().filename() == trans_name + ".txt")
+        if (i.path().filename() == trans_name)
         {
             std::string text;
             std::ifstream infile;
-            infile.open(trans_name + ".txt");
+            infile.open(trans_name);
             if (infile.is_open())
             {
-                infile >> text;
-                std::cout << text << std::endl;
+                while(std::getline(infile,text))
+                {
+                    std::cout << text << std::endl;
+                }
+                return;
             }
         }
     }
+    std::cout << "Transaction not found" << std::endl;
 }
+

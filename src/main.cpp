@@ -44,7 +44,6 @@ int main() {
         std::string trans_name;
         while(true) 
         {
-            system("cls");
             std::cout << "What would you like to do? " << std::endl;
             std::cout << "1. Store transaction" << std::endl;
             std::cout << "2. View stored transactions" << std::endl;
@@ -54,17 +53,19 @@ int main() {
             switch(choice) 
             {
                 case 1:
+                    system("cls");
                     t.Storetrans(base_path, user_name);
                     break;
                 case 2:
+                    system("cls");
                     t.viewtrans(user_name);
+                    break;
                 case 3:
+                    system("cls");
                     std::cout << "Enter transaction name : ";
-                    std::getline(std::cin, trans_name);
+                    std::cin >> trans_name;
                     trans_name = trans_name + ".txt";
                     t.transinfo(user_name, trans_name);
-                default:
-                    std::cout << "Invalid choice" << std::endl;
                     break;
             }
         }   
