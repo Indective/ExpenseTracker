@@ -12,7 +12,7 @@ Expense Tracker is made for that, the application aims to help the user organize
 - ** Storing transactions.
 - ** Viewing all currently stored transactions.
 
-and a lot more to come.
+and a lot more ...
 
 ## Project Structure
 

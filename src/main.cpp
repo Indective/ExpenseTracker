@@ -1,3 +1,10 @@
+// TODO :
+// fix deposit(), avgspending(),and getTransCateg()
+// extend balance logic
+// clean up code, move menu screens into functions
+// refactor everything
+// STOP USING system("cls") 
+
 #include "tracker.h"
 #include <iostream>
 #include <string>
@@ -7,6 +14,7 @@ namespace fs = std::filesystem;
 
 int main() {
     Tracker t;
+    Stats s;
     std::string user_name;
     std::string user_password;
     int balance;
@@ -53,8 +61,10 @@ int main() {
             std::cout << "What would you like to do? " << std::endl;
             std::cout << "1. Store transaction" << std::endl;
             std::cout << "2. View stored transactions" << std::endl;
-            std::cout << "3. Get transaction info" << std::endl;
-            std::cout << "4. Exit." << std::endl;
+            std::cout << "3. View transaction info" << std::endl;
+            std::cout << "4. View general account info + stats" << std::endl;
+            std::cout << "5. Deposit" << std::endl;
+            std::cout << "6. Exit." << std::endl;
             std::cout << "Enter your choice: ";
             std::cin >> choice;
             switch(choice) 
@@ -75,8 +85,13 @@ int main() {
                     t.transinfo(user_name, trans_name);
                     break;
                 case 4:
-                    exit(0);
+                    s.generalscreen(user_name, user_password, base_path, balance);
                     break;
+                case 5 :
+                    int amount;
+                    std::cout << "Enter amount to deposit : ";
+                    std::cin >> amount;
+                    t.deposit(user_name, amount);
             }
         }   
     }

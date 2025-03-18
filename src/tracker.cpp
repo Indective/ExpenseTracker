@@ -7,6 +7,8 @@
 
 namespace fs = std::filesystem;
 
+Stats s;
+
 void Tracker::Storetrans(const std::string &base_path, const std::string user_name)
 {
     std::string full_path = base_path + "/" + fixed_dir + "/" + user_name;
@@ -168,5 +170,151 @@ void Tracker::transinfo(const std::string user_name, const std::string trans_nam
         }
     }
     std::cout << "Transaction not found" << std::endl;
+}
+
+void Tracker::deposit(const std::string user_name, const int amount)
+{
+    try
+    {
+        int new_balance;
+        for (auto i : fs::directory_iterator{fs::current_path()})
+        {
+            if (i.path().filename() == user_name)
+            {
+                std::ifstream infile;
+                infile.open(i.path().filename());
+                if (infile.is_open())
+                {
+                    int c = 0;
+                    std::string text;
+                    while(std::getline(infile,text))
+                    {
+                        c++;
+                        if (c == 1)
+                        {
+                            new_balance = stoi(text) + amount;    
+                            std::cout << new_balance;
+                        }
+                    }
+                }
+                std::ofstream outfile;
+                outfile.open(i.path().filename().string() + ".txt");
+                if (infile.is_open())
+                {
+                    int c = 0;
+                    std::string text;
+                    while(std::getline(infile,text))
+                    {
+                        c++;
+                        if (c == 2)
+                        {
+                            outfile << new_balance; 
+                        }
+                    }     
+                }
+            }
+
+        }
+
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+}
+
+void Stats::avgspending(const std::string user_name)
+{
+    try
+    {
+        int amount;
+        int trans_num;
+        for (auto i : fs::directory_iterator{fs::current_path()})
+        {
+            trans_num ++;
+            if (i.path().filename() == user_name)
+            {
+                continue;
+            }
+            else
+            {
+                std::ifstream infile;
+                infile.open(i.path().filename());
+                if (infile.is_open())
+                {
+                    int c;
+                    std::string text;
+                    while(std::getline(infile,text))
+                    {
+                        c++;
+                        if (c == 2)
+                        {
+                            amount = amount + stoi(text);
+                        }
+                    }
+                }
+            }
+
+        }
+        std::cout << "User average spending : " << amount/trans_num << std::endl;
+
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }   
+}
+
+void Stats::getTransCateg(const std::string user_name)
+{
+    try
+    {
+        for (auto i : fs::directory_iterator{fs::current_path()})
+        {
+            if (i.path().filename() == user_name)
+            {
+                continue;
+            }
+            else
+            {
+                std::ifstream infile;
+                infile.open(i.path().filename().string() + ".txt");
+                if (infile.is_open())
+                {
+                    std::cout << "Users current trans categories : " << std::endl;
+                    int c = 0;
+                    std::string text;
+                    while(std::getline(infile,text))
+                    {
+                        c++;
+                        if (c == 2)
+                        {
+                            std::cout << text << std::endl;
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
+}
+
+void Stats::generalscreen(const std::string user_name, const std::string user_password, const std::string base_path, const int balance)
+{
+    system("cls");
+
+    std::cout << "    " << user_name << std::endl;
+    std::cout << "-----------------------------";
+    std::cout << "User Pasword : " << user_password <<  std::endl;
+    std::cout << "User home directory : " << fs::current_path().string() << std::endl;
+    std::cout << "Users current bank balance : " << balance << std::endl;
+    avgspending(user_name);
+    getTransCateg(user_name);
 }
 
